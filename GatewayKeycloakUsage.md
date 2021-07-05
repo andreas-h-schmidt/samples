@@ -35,8 +35,8 @@ Create a user with its password, for example “myuser”.  Then select the Cred
 
 ![create user](https://github.com/andreas-h-schmidt/samples/blob/main/pictures/kc2.jpg?raw=tue)
 
-To verify the login of the user, open keycloak’s account console:
-http://daefermion1:8080/auth/realms/myrealm/account
+To verify the login of the user, open keycloak’s account console:\
+http://daefermion1:8080/auth/realms/myrealm/account\
 Complete password confirmation if not already done. Then the user is fully activated.
 
 ##### Create Clients
@@ -78,32 +78,32 @@ Take over the values, created at keycloak server into the external authenticatio
 
 ##### Introspection
 
-_Issuer_
-Specify the created realm (“myrealm”) as URL in the “Issuer” field:
+_Issuer_\
+Specify the created realm (“myrealm”) as URL in the “Issuer” field:\
 **http://daefermion1:8080/auth/realms/myrealm**
 
-_JWKS URI_
-Specify the according keycloak URL for possible SSL usage:
+_JWKS URI_\
+Specify the according keycloak URL for possible SSL usage:\
 **http://daefermion1:8080/auth/realms/myrealm/protocol/openid-connect/certs**
 
-_Introspection endpoint_
-The introspection endpoint is used by the application to verify the specified token which will be delivered with user requests. It mainly delivers a json document with the active field, saying true or false, together with scope settings:
+_Introspection endpoint_\
+The introspection endpoint is used by the application to verify the specified token which will be delivered with user requests. It mainly delivers a json document with the active field, saying true or false, together with scope settings:\
 **http://daefermion1:8080/auth/realms/myrealm/protocol/openid-connect/token/introspect**
 
 _Client ID_
-Specify the Gateway client, present on keycloak together with its Client Secret.
+Specify the Gateway client, present on keycloak together with its Client Secret.\
 **apigw**
 
 ##### Metadata
 Define the metadata URLs used by further actions, e.g. API Portal
 
-_Authorize URL_
+_Authorize URL_\
 **http://daefermion1:8080/auth/realms/myrealm/protocol/openid-connect/auth**
 
-_Access Token URL_
+_Access Token URL_\
 **http://daefermion1:8080/auth/realms/myrealm/protocol/openid-connect/token**
 
-_Refresh Token URL_
+_Refresh Token URL_\
 **http://daefermion1:8080/auth/realms/myrealm/protocol/openid-connect/token**
 
 ##### Scopes
@@ -134,11 +134,11 @@ Header:
 Access-Type: application/x-www-form-urlencoded
 
 Payload:
-client_id		    myapp
-client_secret		secret-of-myapp
-grant_type		    password
-username			myuser
-password			mypass
+client_id         myapp
+client_secret     secret-of-myapp
+grant_type        password
+username          myuser
+password          mypass
 ```
 The resulting payload contains a JSON document with the token.
 
@@ -255,11 +255,11 @@ Header:
 Access-Type: application/x-www-form-urlencoded
 
 Payload:
-client_id		    myapp
-client_secret		secret-of-myapp
-grant_type		    password
-username			myuser
-password			mypass
+client_id         myapp
+client_secret     secret-of-myapp
+grant_type        password
+username          myuser
+password          mypass
 ```
 
 Return:
