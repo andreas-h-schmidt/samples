@@ -25,10 +25,10 @@ docker run -d -p 8080:8080 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin
 
 If the server is up, then just login as admin into the Administration console (http://daefermion1:8080/auth). Then create the necessary assets:
 
-##### Create Realm
+#### Create Realm
 Create a realm with “Master -> Create realm”, for example “myrealm”. All further created parts will be part of the realm
 
-##### Create User
+#### Create User
 Create a user with its password, for example “myuser”.  Then select the Credentials tab and specify its password. Those users are necessary for acquiring tokens.
 
 ![create realm](https://github.com/andreas-h-schmidt/samples/blob/main/pictures/kc1.jpg?raw=tue)
@@ -36,10 +36,10 @@ Create a user with its password, for example “myuser”.  Then select the Cred
 ![create user](https://github.com/andreas-h-schmidt/samples/blob/main/pictures/kc2.jpg?raw=tue)
 
 To verify the login of the user, open keycloak’s account console:\
-http://daefermion1:8080/auth/realms/myrealm/account\
+http://daefermion1:8080/auth/realms/myrealm/account \
 Complete password confirmation if not already done. Then the user is fully activated.
 
-##### Create Clients
+#### Create Clients
 
 Clients are used for authentication requests to the server. The clients are identified with its ID and a secret, which is calculated by keycloak. Create two clients:
 
@@ -67,7 +67,7 @@ For selecting the confidential Access Type, you’ll find the Client Secret unde
 
 ## API Gateway
 
-#### Create Authentication Server entry
+### Create Authentication Server entry
 Define the keycloak server as external authentication server:
 _Administration -->  Security  -->  JWT/OAuth_
 
@@ -76,7 +76,7 @@ _Administration -->  Security  -->  JWT/OAuth_
 
 Take over the values, created at keycloak server into the external authentication server configuration.
 
-##### Introspection
+#### Introspection
 
 _Issuer_\
 Specify the created realm (“myrealm”) as URL in the “Issuer” field:\
@@ -90,11 +90,11 @@ _Introspection endpoint_\
 The introspection endpoint is used by the application to verify the specified token which will be delivered with user requests. It mainly delivers a json document with the active field, saying true or false, together with scope settings:\
 **http://daefermion1:8080/auth/realms/myrealm/protocol/openid-connect/token/introspect**
 
-_Client ID_
+_Client ID_\
 Specify the Gateway client, present on keycloak together with its Client Secret.\
 **apigw**
 
-##### Metadata
+#### Metadata
 Define the metadata URLs used by further actions, e.g. API Portal
 
 _Authorize URL_\
@@ -106,25 +106,25 @@ _Access Token URL_\
 _Refresh Token URL_\
 **http://daefermion1:8080/auth/realms/myrealm/protocol/openid-connect/token**
 
-##### Scopes
+#### Scopes
 Scope: Define according scope names present on keycloak which will be mapped with the API having the OAuth2 policy. Ensure that the scope names are matching.
 
-#### Create API with OAuth2 policy
+### Create API with OAuth2 policy
 ![create api](https://github.com/andreas-h-schmidt/samples/blob/main/pictures/ag2.jpg?raw=tue)
 
-#### Create Application
+### Create Application
 Define an Application referring to keycloak Authentication server
 ![create app](https://github.com/andreas-h-schmidt/samples/blob/main/pictures/ag3.jpg?raw=tue)
 
 Select the Authentication Server by its name and specify the User client name from the keycloak server as Client id. Specify the API, which has got the OAuth2 policy.
 
-#### Define a scope
+### Define a scope
 Menu  -->  OAuth/OpenID
 ![create scope](https://github.com/andreas-h-schmidt/samples/blob/main/pictures/ag4.jpg?raw=tue)
 
 ## Requests in detail
 
-##### Try a Token
+#### Try a Token
 At first let keycloak generate a token that can be used for the request to the API. As parameter the user client id with its secret together with the configured keycloak user and password is required for acquiring a token
 
 ```
@@ -150,7 +150,7 @@ Header:
 Authorization: Bearer <token>
 ```
 
-##### Try the introspection
+#### Try the introspection
 You may also try the introspection request and see how keycloak validates. API-Gateway resp. Microgateway issues this request to the keycloak authentication server. The resulting payload contains a JSON document with the validation result.
 
 ```
@@ -177,14 +177,14 @@ For a successful validation it returns:
 ## Microgateway
 For Microgateway there is a similar handling. It just needs the configuration of the Authentication server and the involved assets used with API Gateway. The introspection request to validate the token will be done by Microgateway itself.
 
-##### Required assets and objects for Microgateway:
+#### Required assets and objects for Microgateway:
 
 -	API with OAuth2 policy
 -	Application with the Authentication section (keycloak name and User Client ID)
 -	Gateway Scope
 -	Authentication server alias (via yml file)
 
-##### Use Microgateway accessing API Gateway
+#### Use Microgateway accessing API Gateway
 
 Prepare steps:
 1. Prepare Authentication server, Scope, API and Application as for API Gateway (see above)
@@ -197,7 +197,7 @@ microgateway start -p 7070
              -ds true -apis BayernOAuth2
 ```
 
-##### Use Microgateway with archive
+#### Use Microgateway with archive
 To completely decouple Microgateway from API Gateway at runtime, start Microgateway with prepared export data:
 
 Prepare steps:
@@ -214,7 +214,7 @@ Execute:
 microgateway start -p 7070 -c config.yml -a scopeArchive.zip
 ```
 
-##### Check all the settings
+#### Check all the settings
 Because there are so many assets and configuration settings in effect, you’ll have the ability to validate all required values, server, scope, policy with:
 ```
 microgateway assets -p 7070 -v
@@ -246,7 +246,7 @@ microgateway assets -p 7070 -v
 ```
 Because Check that the API with the application is registered and the authserver entry is valid, especially the mappedScope information.
 
-##### Try a token
+#### Try a token
 Perform the same steps as shown in the API Gateway section. You need only replace the API Gateway port (5555) with the Microgateway port (7070).
 ```
 POST http://daefermion1:8080/auth/realms/myrealm/protocol/openid-connect/token
